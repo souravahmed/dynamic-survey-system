@@ -1,0 +1,12 @@
+{
+  "name": "dynamic-survey-system",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "docker compose up --build",
+    "build": "npm run build --workspaces"
+  }
+}

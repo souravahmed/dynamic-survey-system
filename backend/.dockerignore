@@ -1,0 +1,20 @@
+# Dependency directories
+node_modules
+
+# Build artifacts
+dist
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+.env.development
+.env.test
+
+# Testing
+coverage
+
+# Editor/OS specific
+.vscode
+.idea
+.DS_Store

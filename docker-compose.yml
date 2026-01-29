@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend # Tells Docker where the backend Dockerfile and code are
+      dockerfile: Dockerfile
+    container_name: dss_backend
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persists the 'db' directory from the container to a named volume on the host machine
+      - backend-db-data:/app/db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend # Points to the frontend directory
+      dockerfile: Dockerfile
+    container_name: dss_frontend
+    ports:
+      # Map container port 5173 to host port 5173
+      - "5173:5173"
+    volumes:
+      # Use a bind mount for hot-reloading during development
+      - ./frontend:/app
+      - /app/node_modules # Prevents host's node_modules from overwriting container's
+    restart: unless-stopped
+    # Ensures backend starts before frontend tries to connect
+    depends_on:
+      - backend
+
+volumes:
+  # Defines the volume used to store SQLite data securely outside the container filesystem
+  backend-db-data:
+    driver: local

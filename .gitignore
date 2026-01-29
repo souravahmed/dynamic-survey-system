@@ -1,0 +1,7 @@
+
+node_modules/
+
+# IDE/OS specific
+.DS_Store
+.vscode
+.idea
