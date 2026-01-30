@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/login.tsx","./src/components/register.tsx","./src/configs/axiosconfig.ts","./src/constants/routepath.ts","./src/enums/userrole.ts","./src/hooks/useauth.ts","./src/interfaces/index.ts","./src/services/authservice.ts","./src/store/authstore.ts","./src/utils/urlutil.ts"],"version":"5.9.3"}

@@ -8,6 +8,8 @@ services:
     container_name: dss_backend
     ports:
       - "3000:3000"
+    env_file:
+      - ./backend/.env
     volumes:
       # Persists the 'db' directory from the container to a named volume on the host machine
       - backend-db-data:/app/db
