@@ -8,7 +8,7 @@ export const AuthService = {
     email: string;
     password: string;
   }): Promise<User> => {
-    const { data } = await axiosInstance.post<User>("/auth/login", payload);
+    const { data } = await axiosInstance.post<User>("/auth/signin", payload);
     return data;
   },
 

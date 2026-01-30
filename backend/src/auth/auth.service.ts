@@ -1,10 +1,12 @@
 import { UserRole } from '@/common/enums/user-role.enums';
 import { RegisterDto } from '@/user/dto/register.dto';
 import { UserService } from '@/user/user.service';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { SigninDto } from './dto/SigninDto';
+import { compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -31,6 +33,38 @@ export class AuthService {
     } catch (error) {
       this.logger.error('AuthService.register', error);
       throw error;
+    }
+  }
+
+  async signin(signinDto: SigninDto): Promise<any> {
+    try {
+      const user = await this.userService.getUserByEmail(signinDto.email);
+
+      await this.comparePassword(signinDto.password, user.password);
+
+      const { email, role } = user;
+
+      const accessToken = this.generateAccessToken(email, role);
+      const refreshToken = this.generateRefreshToken(email, role);
+
+      return { ...user, accessToken, refreshToken };
+    } catch (error) {
+      this.logger.error('AuthService.signin', error);
+
+      throw error;
+    }
+  }
+
+  private async comparePassword(
+    givenPassword: string,
+    existPasswordHash: string,
+  ): Promise<void> {
+    const isAuthenticated = await compare(givenPassword, existPasswordHash);
+
+    if (!isAuthenticated) {
+      throw new BadRequestException(
+        'Authentication failed. Invalid  password.',
+      );
     }
   }
 

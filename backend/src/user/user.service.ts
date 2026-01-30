@@ -1,4 +1,9 @@
-import { Injectable, ConflictException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import bcrypt from 'bcryptjs';
@@ -33,6 +38,18 @@ export class UserService {
       this.logger.error('UserService.register', error);
       throw error;
     }
+  }
+
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    return existingUser;
   }
 
   private async isUserExistByEmail(email: string): Promise<void> {
