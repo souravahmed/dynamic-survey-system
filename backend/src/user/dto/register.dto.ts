@@ -1,4 +1,4 @@
-import { UserRole } from '@/common/enums/user-role.enums';
+import { UserRole } from '@/common/enums/user-role.enum';
 import {
   IsEmail,
   IsString,

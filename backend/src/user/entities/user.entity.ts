@@ -1,13 +1,14 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '@/common/entities/base.entity';
-import { UserRole } from '@/common/enums/user-role.enums';
+import { UserRole } from '@/common/enums/user-role.enum';
+import { SurveyEntity } from '@/survey/entities/survey.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()
@@ -19,4 +20,7 @@ export class UserEntity extends BaseEntity {
     default: UserRole.OFFICER,
   })
   role: UserRole;
+
+  @OneToMany(() => SurveyEntity, (survey) => survey.createdBy)
+  surveys: SurveyEntity[];
 }

@@ -6,6 +6,9 @@ import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { SurveyModule } from './survey/survey.module';
+import { SurveyFieldEntity } from './survey/entities/survey-field.entity';
+import { SurveyEntity } from './survey/entities/survey.entity';
 
 @Module({
   imports: [
@@ -16,11 +19,12 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db/database.sqlite',
-      entities: [UserEntity],
+      entities: [UserEntity, SurveyEntity, SurveyFieldEntity],
       synchronize: true,
     }),
     UserModule,
     AuthModule,
+    SurveyModule,
   ],
   controllers: [HealthController],
 })

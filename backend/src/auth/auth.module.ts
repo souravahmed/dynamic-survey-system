@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
@@ -13,15 +14,17 @@ import { AuthController } from './auth.controller';
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         const jwtSecret = configService.get<string>('JWT_SECRET');
-        const accessTokenExpiration = configService.get<string>(
-          'ACCESS_TOKEN_EXPIRATION',
-        );
+
         if (!jwtSecret) {
           throw new Error('JWT_SECRET is not defined');
         }
         return {
           secret: jwtSecret,
-          signOptions: { expiresIn: Number.parseInt(accessTokenExpiration) },
+          signOptions: {
+            expiresIn: configService.get<string>(
+              'ACCESS_TOKEN_EXPIRATION',
+            ) as any,
+          },
         };
       },
       inject: [ConfigService],

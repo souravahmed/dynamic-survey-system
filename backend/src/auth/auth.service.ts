@@ -1,4 +1,5 @@
-import { UserRole } from '@/common/enums/user-role.enums';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { UserRole } from '@/common/enums/user-role.enum';
 import { RegisterDto } from '@/user/dto/register.dto';
 import { UserService } from '@/user/user.service';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
@@ -27,9 +28,7 @@ export class AuthService {
       const accessToken = this.generateAccessToken(email, role);
       const refreshToken = this.generateRefreshToken(email, role);
 
-      const { password: _, ...rest } = user;
-
-      return { ...rest, accessToken, refreshToken };
+      return { ...user, accessToken, refreshToken };
     } catch (error) {
       this.logger.error('AuthService.register', error);
       throw error;
@@ -69,22 +68,20 @@ export class AuthService {
   }
 
   private generateAccessToken(email: string, role: UserRole): string {
-    const expiresIn = this.configService.get<string>('ACCESS_TOKEN_EXPIRATION');
-
     return this.jwtService.sign({ email, role } as JwtPayload, {
       secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: Number.parseInt(expiresIn),
+      expiresIn: this.configService.get<string>(
+        'ACCESS_TOKEN_EXPIRATION',
+      ) as any,
     });
   }
 
   private generateRefreshToken(email: string, role: UserRole): string {
-    const expiresIn = this.configService.get<string>(
-      'REFRESH_TOKEN_EXPIRATION',
-    );
-
     return this.jwtService.sign({ email, role } as JwtPayload, {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-      expiresIn: Number.parseInt(expiresIn),
+      expiresIn: this.configService.get<string>(
+        'REFRESH_TOKEN_EXPIRATION',
+      ) as any,
     });
   }
 }
