@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import { UserEntity } from './entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
+import { UserRole } from '@/common/enums/user-role.enum';
 
 @Injectable()
 export class UserService {
@@ -52,6 +53,12 @@ export class UserService {
     }
 
     return existingUser;
+  }
+
+  async getTotalOfficers(): Promise<number> {
+    return await this.userRepository.count({
+      where: { role: UserRole.OFFICER },
+    });
   }
 
   private async isUserExistByEmail(email: string): Promise<void> {

@@ -52,3 +52,8 @@ export interface SurveyField {
   options?: string[];
   order: number;
 }
+
+export interface Stats {
+  activeSurveys: number;
+  totalOfficers: number;
+}

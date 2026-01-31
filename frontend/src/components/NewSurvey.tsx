@@ -44,7 +44,7 @@ export const NewSurvey = () => {
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: "fields" });
-  const { createSurvey, surveyState } = useSurvey();
+  const { createSurvey, isCreating } = useSurvey();
 
   const onSubmit = (data: any) => {
     createSurvey(data);
@@ -120,14 +120,14 @@ export const NewSurvey = () => {
 
             <button
               type="submit"
-              disabled={surveyState.isPending}
+              disabled={isCreating}
               className={`w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-4 rounded-2xl transition-all font-black shadow-xl active:scale-[0.98] ${
-                surveyState.isPending
+                isCreating
                   ? "bg-indigo-400 cursor-not-allowed shadow-none"
                   : "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200"
               }`}
             >
-              {surveyState.isPending ? (
+              {isCreating ? (
                 <>
                   <Loader2 size={20} className="animate-spin" />
                   Publishing...
@@ -352,14 +352,16 @@ const SurveyFieldItem = ({ index, register, control, remove, errors }: any) => {
             </span>
           </label>
 
-          <button
-            type="button"
-            onClick={() => remove(index)}
-            className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium text-sm"
-          >
-            <Trash2 size={16} />
-            Remove Question
-          </button>
+          {index !== 0 && (
+            <button
+              type="button"
+              onClick={() => remove(index)}
+              className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium text-sm"
+            >
+              <Trash2 size={16} />
+              Remove Question
+            </button>
+          )}
         </div>
       </div>
     </div>
