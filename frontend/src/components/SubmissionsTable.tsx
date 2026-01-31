@@ -1,13 +1,15 @@
 import {
-  ChevronLeft,
-  ChevronRight,
-  Eye,
   Calendar,
   User,
   FileText,
+  ChevronDown,
+  ChevronUp,
+  MessageSquareText,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { PaginatedResponse, SurveySubmission } from "@/interfaces";
+import React, { useState } from "react";
 
 interface Props {
   response: PaginatedResponse<SurveySubmission>;
@@ -25,12 +27,19 @@ export const SubmissionsTable = ({
   onPageChange,
   onLimitChange,
 }: Props) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const toggleRow = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50/50 border-b border-slate-200">
+              <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-widest w-10"></th>
               <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
                 Survey Title
               </th>
@@ -46,34 +55,85 @@ export const SubmissionsTable = ({
             {isLoading ? (
               [...Array(5)].map((_, i) => <SkeletonRow key={i} />)
             ) : response?.data?.length > 0 ? (
-              response?.data?.map((sub) => (
-                <tr
-                  key={sub.id}
-                  className="hover:bg-slate-50/50 transition-colors group"
-                >
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-                        <FileText size={16} />
+              response.data.map((sub) => (
+                <React.Fragment key={sub.id}>
+                  {/* MAIN ROW */}
+                  <tr
+                    onClick={() => toggleRow(sub.id)}
+                    className={`cursor-pointer transition-colors ${expandedId === sub.id ? "bg-indigo-50/30" : "hover:bg-slate-50/50"}`}
+                  >
+                    <td className="p-4 text-slate-400">
+                      {expandedId === sub.id ? (
+                        <ChevronUp size={18} />
+                      ) : (
+                        <ChevronDown size={18} />
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-white border border-slate-200 text-indigo-600 rounded-lg shadow-sm">
+                          <FileText size={16} />
+                        </div>
+                        <span className="font-semibold text-slate-700">
+                          {sub.survey?.title}
+                        </span>
                       </div>
-                      <span className="font-semibold text-slate-700">
-                        {sub.survey?.title}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="p-4 text-slate-600 font-medium">
-                    <div className="flex items-center gap-2">
-                      <User size={14} className="text-slate-400" />
-                      {sub.submittedBy?.name || "Anonymous"}
-                    </div>
-                  </td>
-                  <td className="p-4 text-slate-500 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Calendar size={14} className="text-slate-400" />
-                      {new Date(sub.submittedAt).toLocaleDateString()}
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                    <td className="p-4 text-slate-600 font-medium">
+                      <div className="flex items-center gap-2">
+                        <User size={14} className="text-slate-400" />
+                        {sub.submittedBy?.name || "Anonymous"}
+                      </div>
+                    </td>
+                    <td className="p-4 text-slate-500 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={14} className="text-slate-400" />
+                        {new Date(sub.submittedAt).toLocaleDateString()}
+                      </div>
+                    </td>
+                  </tr>
+
+                  {/* 2. EXPANDABLE ANSWER SECTION */}
+                  {expandedId === sub.id && (
+                    <tr>
+                      <td colSpan={4} className="p-0 bg-slate-50/50">
+                        <div className="px-14 py-6 animate-in slide-in-from-top-2 duration-200">
+                          <div className="flex items-center gap-2 mb-4">
+                            <MessageSquareText
+                              size={16}
+                              className="text-indigo-500"
+                            />
+                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                              Submitted Responses
+                            </h4>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {sub.answers?.map((ans) => (
+                              <div
+                                key={ans.id}
+                                className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm"
+                              >
+                                <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">
+                                  Question: {ans.field?.label}
+                                </p>
+                                <p className="text-sm font-semibold text-slate-800 mb-2">
+                                  Response :
+                                </p>
+                                <div className="text-sm text-indigo-600 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 font-medium">
+                                  {ans.value || (
+                                    <span className="italic text-slate-400">
+                                      No response provided
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))
             ) : (
               <tr>
@@ -88,7 +148,6 @@ export const SubmissionsTable = ({
           </tbody>
         </table>
       </div>
-
       {/* Pagination Footer */}
       <div className="p-4 bg-slate-50/50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">

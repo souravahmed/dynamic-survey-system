@@ -39,11 +39,6 @@ export const MENU_ITEMS: Record<string, MenuItem[]> = {
       label: "Available Surveys",
       path: RoutePath.DASHBOARD,
     },
-    {
-      icon: ClipboardList,
-      label: "My Submissions",
-      path: "/my-submissions",
-    },
   ],
 };
 

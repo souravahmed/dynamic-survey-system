@@ -12,6 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import { RoutePath } from "@/constants/routePath";
 import { Survey } from "@/interfaces";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export const DashboardPage = () => {
   const { user } = useAuthStore();
@@ -33,12 +34,14 @@ export const DashboardPage = () => {
 
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-slate-900">Recent Surveys</h2>
-        <Link
-          to={RoutePath.NEW_SURVEY}
-          className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
-        >
-          Create New <ArrowRight size={16} />
-        </Link>
+        <RoleGuard allowedRoles={[UserRole.ADMIN]}>
+          <Link
+            to={RoutePath.NEW_SURVEY}
+            className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+          >
+            Create New <ArrowRight size={16} />
+          </Link>
+        </RoleGuard>
       </div>
 
       {isLoadingList ? (
@@ -122,22 +125,21 @@ const SurveyCard = ({ survey }: { survey: Survey }) => {
           <Calendar size={14} />
           {new Date(survey.createdAt).toLocaleDateString()}
         </div>
-        {user?.role === UserRole.OFFICER && (
+        <RoleGuard allowedRoles={[UserRole.OFFICER]}>
           <Link
             to={`/surveys/${survey.id}`}
-            className="p-2 bg-slate-50 text-slate-400 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-400 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-all whitespace-nowrap text-sm font-semibold"
           >
+            <span>Take Survey</span>
             <ArrowRight size={18} />
           </Link>
-        )}
+        </RoleGuard>
       </div>
     </div>
   );
 };
 
 const EmptyList = () => {
-  const { user } = useAuthStore();
-
   return (
     <div className="bg-white rounded-3xl border border-dashed border-slate-200 p-12 text-center">
       <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -146,17 +148,22 @@ const EmptyList = () => {
       <h3 className="text-lg font-bold text-slate-900 mb-1">
         No surveys found
       </h3>
-      <p className="text-slate-400 font-medium mb-6">
-        {user?.role === UserRole.ADMIN
-          ? "You haven't created any surveys yet."
-          : "No surveys have been assigned to you."}
-      </p>
-      <Link
-        to={RoutePath.NEW_SURVEY}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
-      >
-        Create Your First Survey
-      </Link>
+      <RoleGuard allowedRoles={[UserRole.OFFICER]}>
+        <p className="text-slate-400 font-medium mb-6">
+          No surveys have been assigned to you
+        </p>
+      </RoleGuard>
+      <RoleGuard allowedRoles={[UserRole.ADMIN]}>
+        <p className="text-slate-400 font-medium mb-6">
+          You haven't created any surveys yet.
+        </p>
+        <Link
+          to={RoutePath.NEW_SURVEY}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+        >
+          Create Your First Survey
+        </Link>
+      </RoleGuard>
     </div>
   );
 };
