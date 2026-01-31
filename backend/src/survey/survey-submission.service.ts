@@ -29,7 +29,7 @@ export class SurveySubmissionService {
   async createSubmission(
     createSubmissionDto: CreateSurveySubmissionDto,
     loggedUserEmail: string,
-  ) {
+  ): Promise<SurveySubmissionEntity> {
     const { answers } = createSubmissionDto;
 
     const survey = await this.surveyService.getSurveyById(

@@ -1,10 +1,11 @@
 import { useAuthStore } from "@/store/authStore";
 import { ClipboardList, LogOut } from "lucide-react";
 import { Link, useLocation, Outlet } from "react-router-dom"; // [1] Import Outlet
-import Footer from "./Footer";
 import { getMenuItems } from "@/constants/sidebarNavigation";
+import { Footer } from "./Footer";
+import { RoutePath } from "@/constants/routePath";
 
-export default function DashboardLayout() {
+export const DashboardLayout = () => {
   const { user, logout } = useAuthStore();
   const location = useLocation();
 
@@ -15,12 +16,15 @@ export default function DashboardLayout() {
       {/* Sidebar - Desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200">
         <div className="p-6">
-          <div className="flex items-center gap-3 text-indigo-600 font-bold text-xl">
+          <Link
+            to={RoutePath.DASHBOARD}
+            className="flex items-center gap-3 text-indigo-600 font-bold text-xl hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <div className="bg-indigo-600 p-2 rounded-lg text-white">
               <ClipboardList size={20} />
             </div>
             <span className="leading-tight">DSS</span>
-          </div>
+          </Link>
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
@@ -67,8 +71,7 @@ export default function DashboardLayout() {
         <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8">
           <div className="flex-1 md:flex-none">
             <h2 className="text-lg font-bold text-slate-800">
-              {menuItems.find((item) => item.path === location.pathname)
-                ?.label || "Dashboard"}
+              {menuItems.find((item) => item.path === location.pathname)?.label}
             </h2>
           </div>
         </header>
@@ -81,4 +84,4 @@ export default function DashboardLayout() {
       </main>
     </div>
   );
-}
+};

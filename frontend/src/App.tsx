@@ -7,13 +7,14 @@ import {
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // [1] Import Provider
-import Login from "./components/Login";
-import Register from "./components/Register";
 import { RoutePath } from "./constants/routePath";
 import { useAuthStore } from "@/store/authStore";
-import Dashboard from "./components/Dashboard";
 import { NewSurvey } from "./components/NewSurvey";
-import DashboardLayout from "./components/DashboardLayout";
+import { Dashboard } from "./components/Dashboard";
+import { DashboardLayout } from "./components/DashboardLayout";
+import { Login } from "./components/Login";
+import { Register } from "./components/Register";
+import { FillSurvey } from "./components/FillSurvey";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,7 @@ function App() {
             <Route element={<DashboardLayout />}>
               <Route path={RoutePath.DASHBOARD} element={<Dashboard />} />
               <Route path={RoutePath.NEW_SURVEY} element={<NewSurvey />} />
+              <Route path="/surveys/:id" element={<FillSurvey />} />
             </Route>
           </Route>
 

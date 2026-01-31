@@ -27,11 +27,6 @@ export const MENU_ITEMS: Record<string, MenuItem[]> = {
       path: RoutePath.NEW_SURVEY,
     },
     {
-      icon: ClipboardList,
-      label: "Manage Surveys",
-      path: "/surveys/manage",
-    },
-    {
       icon: BarChart3,
       label: "Submissions",
       path: "/submissions",

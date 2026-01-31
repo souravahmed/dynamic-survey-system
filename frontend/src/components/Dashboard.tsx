@@ -7,14 +7,13 @@ import {
   ArrowRight,
   ClipboardList,
   CheckCircle,
-  Clock,
   FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RoutePath } from "@/constants/routePath";
 import { Survey } from "@/interfaces";
 
-export default function Dashboard() {
+export const Dashboard = () => {
   const { user } = useAuthStore();
 
   const { surveys, isLoadingList } = useSurvey();
@@ -55,7 +54,7 @@ export default function Dashboard() {
       )}
     </div>
   );
-}
+};
 
 const SurveyLoader = () => {
   return (
@@ -92,6 +91,8 @@ const StatsLoader = () => {
 };
 
 const SurveyCard = ({ survey }: { survey: Survey }) => {
+  const { user } = useAuthStore();
+
   return (
     <div className="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300">
       <div className="flex justify-between items-start mb-4">
@@ -121,12 +122,14 @@ const SurveyCard = ({ survey }: { survey: Survey }) => {
           <Calendar size={14} />
           {new Date(survey.createdAt).toLocaleDateString()}
         </div>
-        <Link
-          to={`/surveys/${survey.id}`}
-          className="p-2 bg-slate-50 text-slate-400 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-all"
-        >
-          <ArrowRight size={18} />
-        </Link>
+        {user?.role === UserRole.OFFICER && (
+          <Link
+            to={`/surveys/${survey.id}`}
+            className="p-2 bg-slate-50 text-slate-400 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-all"
+          >
+            <ArrowRight size={18} />
+          </Link>
+        )}
       </div>
     </div>
   );

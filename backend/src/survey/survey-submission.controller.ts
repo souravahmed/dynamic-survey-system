@@ -7,6 +7,7 @@ import { SurveySubmissionService } from './survey-submission.service';
 import { CreateSurveySubmissionDto } from './dto/create-survey-submission.dto';
 import { LoggedUser } from '@/common/decorators/logged-user.decorator';
 import { JwtPayload } from '@/auth/interfaces/jwt-payload.interface';
+import { SurveySubmissionEntity } from './entities/survey-submission.entity';
 
 @Controller('v1/survey-submissions')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -18,7 +19,7 @@ export class SurveySubmissionController {
   async createSubmission(
     @Body() createSurveySubmissionDto: CreateSurveySubmissionDto,
     @LoggedUser() loggedUser: JwtPayload,
-  ) {
+  ): Promise<SurveySubmissionEntity> {
     return this.surveySubmissionService.createSubmission(
       createSurveySubmissionDto,
       loggedUser.email,

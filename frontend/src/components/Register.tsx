@@ -11,9 +11,9 @@ import {
   ClipboardList,
   Loader2,
 } from "lucide-react";
-import Footer from "./Footer";
+import { Footer } from "./Footer";
 
-export default function Register() {
+export const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -182,4 +182,4 @@ export default function Register() {
       </div>
     </div>
   );
-}
+};

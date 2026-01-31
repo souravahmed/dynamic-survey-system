@@ -25,6 +25,16 @@ export interface SurveyPayload {
   fields: SurveyFieldPayload[];
 }
 
+export interface SurveySubmissionPayload {
+  surveyId: string;
+  answers: AnswerPayload[];
+}
+
+export interface AnswerPayload {
+  fieldId: string;
+  value: string;
+}
+
 export interface SurveyFieldPayload {
   label: string;
   fieldType: FieldType;
@@ -57,4 +67,22 @@ export interface Stats {
   activeSurveys: number;
   totalOfficers: number;
   totalSurveySubmissionToday: number;
+}
+
+export interface SurveySubmission {
+  id: string;
+  surveyId: string;
+  survey?: Survey;
+  submittedById: string;
+  submittedBy?: User;
+  submittedAt: string;
+  answers: SurveySubmissionAnswer[];
+}
+
+export interface SurveySubmissionAnswer {
+  id: string;
+  submissionId: string;
+  fieldId: string;
+  field?: SurveyField;
+  value: string;
 }

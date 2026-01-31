@@ -9,6 +9,11 @@ export const SurveyService = {
     return data;
   },
 
+  getById: async (id: string): Promise<Survey> => {
+    const { data } = await axiosInstance.get<Survey>(`/surveys/${id}`);
+    return data;
+  },
+
   getAll: async (): Promise<Survey[]> => {
     const { data } = await axiosInstance.get<Survey[]>("/surveys");
     return data;

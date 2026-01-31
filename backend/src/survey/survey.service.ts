@@ -44,7 +44,7 @@ export class SurveyService {
   async getSurveyById(id: string) {
     const survey = await this.surveyRepository.findOne({
       where: { id },
-      relations: ['fields', 'createdBy'],
+      relations: ['fields'],
     });
 
     if (!survey) {
@@ -57,7 +57,6 @@ export class SurveyService {
   async getAllSurveys(role: UserRole): Promise<SurveyEntity[]> {
     if (role === UserRole.ADMIN) {
       return this.surveyRepository.find({
-        relations: ['fields', 'createdBy'],
         order: { createdAt: 'DESC' },
       });
     }
