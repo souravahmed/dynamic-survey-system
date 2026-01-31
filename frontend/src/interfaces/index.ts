@@ -1,3 +1,4 @@
+import { FieldType } from "@/enums/fieldType";
 import { UserRole } from "@/enums/userRole";
 
 export interface User {
@@ -11,9 +12,43 @@ export interface User {
   updatedAt: string;
 }
 
-export interface RegisterData {
+export interface RegisterPayload {
   email: string;
   password: string;
   name: string;
   role?: UserRole;
+}
+
+export interface SurveyPayload {
+  title: string;
+  description?: string;
+  fields: SurveyFieldPayload[];
+}
+
+export interface SurveyFieldPayload {
+  label: string;
+  fieldType: FieldType;
+  isRequired: boolean;
+  options?: string[];
+}
+
+export interface Survey {
+  id: string;
+  title: string;
+  description?: string;
+  isActive: boolean;
+  createdById: string;
+  createdBy?: User;
+  createdAt: string;
+  updatedAt: string;
+  fields: SurveyField[];
+}
+
+export interface SurveyField {
+  id?: string;
+  label: string;
+  fieldType: FieldType;
+  isRequired: boolean;
+  options?: string[];
+  order: number;
 }

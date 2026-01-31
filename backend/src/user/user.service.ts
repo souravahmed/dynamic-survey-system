@@ -41,9 +41,11 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<UserEntity> {
-    const existingUser = await this.userRepository.findOne({
-      where: { email },
-    });
+    const existingUser = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .addSelect('user.password')
+      .getOne();
 
     if (!existingUser) {
       throw new NotFoundException(`User with email ${email} not found`);

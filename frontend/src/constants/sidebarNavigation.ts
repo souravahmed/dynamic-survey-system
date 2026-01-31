@@ -24,7 +24,7 @@ export const MENU_ITEMS: Record<string, MenuItem[]> = {
     {
       icon: PlusCircle,
       label: "Create Survey",
-      path: "/surveys/new",
+      path: RoutePath.NEW_SURVEY,
     },
     {
       icon: ClipboardList,

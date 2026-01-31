@@ -12,6 +12,8 @@ import Register from "./components/Register";
 import { RoutePath } from "./constants/routePath";
 import { useAuthStore } from "@/store/authStore";
 import Dashboard from "./components/Dashboard";
+import { NewSurvey } from "./components/NewSurvey";
+import DashboardLayout from "./components/DashboardLayout";
 
 const queryClient = new QueryClient();
 
@@ -61,8 +63,10 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path={RoutePath.DASHBOARD} element={<Dashboard />} />
-            {/* Add more protected routes here */}
+            <Route element={<DashboardLayout />}>
+              <Route path={RoutePath.DASHBOARD} element={<Dashboard />} />
+              <Route path={RoutePath.NEW_SURVEY} element={<NewSurvey />} />
+            </Route>
           </Route>
 
           {/* Catch-all: Redirect any unknown route to Dashboard */}

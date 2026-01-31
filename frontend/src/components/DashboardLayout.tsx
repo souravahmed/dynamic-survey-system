@@ -1,11 +1,10 @@
-import { ReactNode } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { ClipboardList, LogOut } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Outlet } from "react-router-dom"; // [1] Import Outlet
 import Footer from "./Footer";
 import { getMenuItems } from "@/constants/sidebarNavigation";
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default function DashboardLayout() {
   const { user, logout } = useAuthStore();
   const location = useLocation();
 
@@ -75,7 +74,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </header>
 
         {/* Dynamic Content */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8">{children}</div>
+        <div className="flex-1 overflow-y-auto p-4 md:p-8">
+          <Outlet />
+        </div>
         <Footer />
       </main>
     </div>

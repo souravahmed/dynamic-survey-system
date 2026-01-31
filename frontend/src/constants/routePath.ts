@@ -3,4 +3,5 @@ export const RoutePath = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
   REGISTER: "/register",
+  NEW_SURVEY: "/surveys/new",
 } as const;

@@ -1,5 +1,5 @@
 import { RoutePath } from "@/constants/routePath";
-import { RegisterData } from "@/interfaces";
+import { RegisterPayload } from "@/interfaces";
 import { AuthService } from "@/services/authService";
 import { useAuthStore } from "@/store/authStore";
 import { useMutation } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   const signupMutation = useMutation({
-    mutationFn: async (payload: RegisterData) => {
+    mutationFn: async (payload: RegisterPayload) => {
       const response = await AuthService.signup(payload);
       return response;
     },
