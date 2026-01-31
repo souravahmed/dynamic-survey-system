@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { SurveyModule } from './survey/survey.module';
 import { SurveyFieldEntity } from './survey/entities/survey-field.entity';
 import { SurveyEntity } from './survey/entities/survey.entity';
+import { SurveySubmissionEntity } from './survey/entities/survey-submission.entity';
+import { SurveySubmissionAnswerEntity } from './survey/entities/survey-submission-answer.entity';
 
 @Module({
   imports: [
@@ -19,7 +21,13 @@ import { SurveyEntity } from './survey/entities/survey.entity';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db/database.sqlite',
-      entities: [UserEntity, SurveyEntity, SurveyFieldEntity],
+      entities: [
+        UserEntity,
+        SurveyEntity,
+        SurveyFieldEntity,
+        SurveySubmissionEntity,
+        SurveySubmissionAnswerEntity,
+      ],
       synchronize: true,
     }),
     UserModule,

@@ -178,17 +178,10 @@ const StatsGrid = () => {
     },
     {
       label: "Submissions Today",
-      value: "156",
+      value: stats?.totalSurveySubmissionToday,
       icon: CheckCircle,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
-    },
-    {
-      label: "Avg. Completion Time",
-      value: "4m",
-      icon: Clock,
-      color: "text-orange-600",
-      bg: "bg-orange-50",
     },
   ];
 

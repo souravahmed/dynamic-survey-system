@@ -2,6 +2,7 @@ import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '@/common/entities/base.entity';
 import { UserRole } from '@/common/enums/user-role.enum';
 import { SurveyEntity } from '@/survey/entities/survey.entity';
+import { SurveySubmissionEntity } from '@/survey/entities/survey-submission.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -23,4 +24,10 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => SurveyEntity, (survey) => survey.createdBy)
   surveys: SurveyEntity[];
+
+  @OneToMany(
+    () => SurveySubmissionEntity,
+    (submission) => submission.submittedBy,
+  )
+  submissions: SurveySubmissionEntity[];
 }

@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { SurveyEntity } from './entities/survey.entity';
 import { SurveyFieldEntity } from './entities/survey-field.entity';
 import { CreateSurveyDto, CreateFieldDto } from './dto/create-survey.dto';
 import { UserService } from '@/user/user.service';
 import { UserRole } from '@/common/enums/user-role.enum';
 import { Stats } from './interfaces/stats.interface';
+import { SurveySubmissionEntity } from './entities/survey-submission.entity';
 
 @Injectable()
 export class SurveyService {
@@ -15,6 +17,8 @@ export class SurveyService {
     private surveyRepository: Repository<SurveyEntity>,
     @InjectRepository(SurveyFieldEntity)
     private surveyFieldRepository: Repository<SurveyFieldEntity>,
+    @InjectRepository(SurveySubmissionEntity)
+    private surveySubmissionRepository: Repository<SurveySubmissionEntity>,
     private userService: UserService,
   ) {}
 
@@ -66,14 +70,27 @@ export class SurveyService {
   }
 
   async getStats(): Promise<Stats> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     const [activeSurveys, totalOfficers] = await Promise.all([
       this.surveyRepository.count({ where: { isActive: true } }),
       this.userService.getTotalOfficers(),
     ]);
 
+    const totalSurveySubmissionToday =
+      await this.surveySubmissionRepository.count({
+        where: {
+          submittedAt: Between(today, tomorrow),
+        },
+      });
+
     return {
       activeSurveys,
       totalOfficers,
+      totalSurveySubmissionToday,
     };
   }
 

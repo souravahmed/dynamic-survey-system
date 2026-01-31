@@ -2,6 +2,7 @@ import { BaseEntity } from '@/common/entities/base.entity';
 import { UserEntity } from '@/user/entities/user.entity';
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { SurveyFieldEntity } from './survey-field.entity';
+import { SurveySubmissionEntity } from './survey-submission.entity';
 
 @Entity('surveys')
 export class SurveyEntity extends BaseEntity {
@@ -25,4 +26,7 @@ export class SurveyEntity extends BaseEntity {
     cascade: true,
   })
   fields: SurveyFieldEntity[];
+
+  @OneToMany(() => SurveySubmissionEntity, (submission) => submission.survey)
+  submissions: SurveySubmissionEntity[];
 }
