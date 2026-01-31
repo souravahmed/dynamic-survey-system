@@ -14,6 +14,7 @@ import {
 } from './dto/create-survey-submission.dto';
 import { SurveyService } from './survey.service';
 import { UserService } from '@/user/user.service';
+import { PaginatedResponse } from '@/common/interfaces/paginated-response.interface';
 
 @Injectable()
 export class SurveySubmissionService {
@@ -117,5 +118,30 @@ export class SurveySubmissionService {
     }
 
     return submission;
+  }
+
+  async getSubmissions(
+    surveyId?: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedResponse<SurveySubmissionEntity>> {
+    const skip = (page - 1) * limit;
+
+    const [submissions, total] =
+      await this.surveySubmissionRepository.findAndCount({
+        where: surveyId === 'undefined' ? {} : { surveyId },
+        relations: ['answers', 'answers.field', 'submittedBy', 'survey'],
+        order: { submittedAt: 'DESC' },
+        skip,
+        take: limit,
+      });
+
+    return {
+      data: submissions,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 }

@@ -7,7 +7,7 @@ import { useSurveySubmission } from "@/hooks/useSurveySubmission";
 import { FieldType } from "@/enums/fieldType";
 import { AnswerPayload, SurveySubmissionPayload } from "@/interfaces";
 
-export const FillSurvey = () => {
+export const FillSurveyPage = () => {
   const { id } = useParams();
   const { survey, isSurveyLoading } = useSurvey(id);
   const { submitSurvey, isSubmitting } = useSurveySubmission();

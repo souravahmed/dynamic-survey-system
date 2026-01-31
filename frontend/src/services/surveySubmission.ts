@@ -1,5 +1,9 @@
 import { getAxiosInstance } from "@/configs/axiosConfig";
-import { SurveySubmission, SurveySubmissionPayload } from "@/interfaces";
+import {
+  PaginatedResponse,
+  SurveySubmission,
+  SurveySubmissionPayload,
+} from "@/interfaces";
 
 const axiosInstance = getAxiosInstance();
 
@@ -11,6 +15,16 @@ export const SurveySubmissionService = {
       "/survey-submissions",
       payload,
     );
+    return data;
+  },
+  getSurveySubmissions: async (
+    surveyId?: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedResponse<SurveySubmission>> => {
+    const { data } = await axiosInstance.get<
+      PaginatedResponse<SurveySubmission>
+    >(`/survey-submissions/survey/${surveyId}?page=${page}&limit=${limit}`);
     return data;
   },
 };

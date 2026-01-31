@@ -9,12 +9,13 @@ import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // [1] Import Provider
 import { RoutePath } from "./constants/routePath";
 import { useAuthStore } from "@/store/authStore";
-import { NewSurvey } from "./components/NewSurvey";
-import { Dashboard } from "./components/Dashboard";
+import { NewSurveyPage } from "./pages/NewSurveyPage";
+import { DashboardPage } from "./pages/DashboardPage";
 import { DashboardLayout } from "./components/DashboardLayout";
-import { Login } from "./components/Login";
-import { Register } from "./components/Register";
-import { FillSurvey } from "./components/FillSurvey";
+import { FillSurveyPage } from "./pages/FillSurveyPage";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { SubmissionsPage } from "./pages/SubmissionPage";
 
 const queryClient = new QueryClient();
 
@@ -58,16 +59,20 @@ function App() {
 
           {/* Public Routes */}
           <Route element={<PublicRoute />}>
-            <Route path={RoutePath.LOGIN} element={<Login />} />
-            <Route path={RoutePath.REGISTER} element={<Register />} />
+            <Route path={RoutePath.LOGIN} element={<LoginPage />} />
+            <Route path={RoutePath.REGISTER} element={<RegisterPage />} />
           </Route>
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
-              <Route path={RoutePath.DASHBOARD} element={<Dashboard />} />
-              <Route path={RoutePath.NEW_SURVEY} element={<NewSurvey />} />
-              <Route path="/surveys/:id" element={<FillSurvey />} />
+              <Route path={RoutePath.DASHBOARD} element={<DashboardPage />} />
+              <Route path={RoutePath.NEW_SURVEY} element={<NewSurveyPage />} />
+              <Route
+                path={RoutePath.SUBMISSIONS}
+                element={<SubmissionsPage />}
+              />
+              <Route path="/surveys/:id" element={<FillSurveyPage />} />
             </Route>
           </Route>
 

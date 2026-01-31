@@ -2,11 +2,15 @@ import { QUERY_KEYS } from "@/constants/queryKeys";
 import { RoutePath } from "@/constants/routePath";
 import { SurveySubmissionPayload } from "@/interfaces";
 import { SurveySubmissionService } from "@/services/surveySubmission";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export const useSurveySubmission = () => {
+export const useSurveySubmission = (
+  surveyId?: string,
+  page: number = 1,
+  limit: number = 10,
+) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -21,8 +25,24 @@ export const useSurveySubmission = () => {
     onError: () => toast.error("Failed to submit survey"),
   });
 
+  const submissionsQuery = useQuery({
+    queryKey: [
+      QUERY_KEYS.SURVEY_SUBMISSIONS,
+      surveyId ?? "all",
+      { page, limit },
+    ],
+
+    queryFn: () =>
+      SurveySubmissionService.getSurveySubmissions(surveyId, page, limit),
+
+    placeholderData: (previousData) => previousData,
+  });
+
   return {
     submitSurvey: submitMutation.mutate,
     isSubmitting: submitMutation.isPending,
+
+    submissions: submissionsQuery.data,
+    isLoadingSubmissions: submissionsQuery.isLoading,
   };
 };

@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { RoutePath } from "@/constants/routePath";
 import { Survey } from "@/interfaces";
 
-export const Dashboard = () => {
+export const DashboardPage = () => {
   const { user } = useAuthStore();
 
   const { surveys, isLoadingList } = useSurvey();

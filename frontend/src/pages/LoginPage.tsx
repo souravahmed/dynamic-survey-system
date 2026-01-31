@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 import { Lock, Mail, ClipboardList, Loader2 } from "lucide-react";
-import { Footer } from "./Footer";
+import { Footer } from "@/components/Footer";
 
-export const Login = () => {
+export const LoginPage = () => {
   const { login, loginState } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

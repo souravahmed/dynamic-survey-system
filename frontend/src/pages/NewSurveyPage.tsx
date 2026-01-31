@@ -21,7 +21,7 @@ import {
   UseFormRegister,
 } from "react-hook-form";
 
-export const NewSurvey = () => {
+export const NewSurveyPage = () => {
   const {
     register,
     control,

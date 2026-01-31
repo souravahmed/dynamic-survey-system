@@ -60,7 +60,6 @@ export interface SurveyField {
   fieldType: FieldType;
   isRequired: boolean;
   options?: string[];
-  order: number;
 }
 
 export interface Stats {
@@ -85,4 +84,12 @@ export interface SurveySubmissionAnswer {
   fieldId: string;
   field?: SurveyField;
   value: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
