@@ -121,7 +121,6 @@ export class SurveySubmissionService {
   }
 
   async getSubmissions(
-    surveyId?: string,
     page: number = 1,
     limit: number = 10,
   ): Promise<PaginatedResponse<SurveySubmissionEntity>> {
@@ -129,7 +128,7 @@ export class SurveySubmissionService {
 
     const [submissions, total] =
       await this.surveySubmissionRepository.findAndCount({
-        where: surveyId === 'undefined' ? {} : { surveyId },
+        where: {},
         relations: ['answers', 'answers.field', 'submittedBy', 'survey'],
         order: { submittedAt: 'DESC' },
         skip,

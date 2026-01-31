@@ -6,11 +6,7 @@ import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export const useSurveySubmission = (
-  surveyId?: string,
-  page: number = 1,
-  limit: number = 10,
-) => {
+export const useSurveySubmission = (page: number = 1, limit: number = 10) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -26,14 +22,9 @@ export const useSurveySubmission = (
   });
 
   const submissionsQuery = useQuery({
-    queryKey: [
-      QUERY_KEYS.SURVEY_SUBMISSIONS,
-      surveyId ?? "all",
-      { page, limit },
-    ],
+    queryKey: [QUERY_KEYS.SURVEY_SUBMISSIONS, { page, limit }],
 
-    queryFn: () =>
-      SurveySubmissionService.getSurveySubmissions(surveyId, page, limit),
+    queryFn: () => SurveySubmissionService.getSurveySubmissions(page, limit),
 
     placeholderData: (previousData) => previousData,
   });

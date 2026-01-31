@@ -7,7 +7,6 @@ export const SubmissionsPage = () => {
   const [limit, setLimit] = useState(10);
 
   const { submissions, isLoadingSubmissions } = useSurveySubmission(
-    undefined,
     page,
     limit,
   );

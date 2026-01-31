@@ -35,13 +35,12 @@ export class SurveySubmissionController {
     );
   }
 
-  @Get(['survey/:surveyId', 'survey'])
+  @Get('survey')
   @Roles(UserRole.ADMIN)
   getSubmissionsBySurvey(
-    @Param('surveyId') surveyId?: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ): Promise<PaginatedResponse<SurveySubmissionEntity>> {
-    return this.surveySubmissionService.getSubmissions(surveyId, page, limit);
+    return this.surveySubmissionService.getSubmissions(page, limit);
   }
 }

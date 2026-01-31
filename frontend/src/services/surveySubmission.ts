@@ -18,13 +18,12 @@ export const SurveySubmissionService = {
     return data;
   },
   getSurveySubmissions: async (
-    surveyId?: string,
     page: number = 1,
     limit: number = 10,
   ): Promise<PaginatedResponse<SurveySubmission>> => {
     const { data } = await axiosInstance.get<
       PaginatedResponse<SurveySubmission>
-    >(`/survey-submissions/survey/${surveyId}?page=${page}&limit=${limit}`);
+    >(`/survey-submissions/survey/?page=${page}&limit=${limit}`);
     return data;
   },
 };
