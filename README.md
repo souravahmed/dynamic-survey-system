@@ -20,10 +20,11 @@ A full-stack, survey management system featuring a dynamic form builder, role-ba
 
 2. **Copy the `.env.example` file and rename it to `.env` both in the frontend and backend directories:**
 
-3. **Build and start both frontend and backend:**
-   ```bash
-   npm run dev
-   ```
+3. **Build and start the stack:**
+
+```bash
+npm run dev
+```
 
 If you change dependencies:
 
@@ -37,12 +38,15 @@ If you change dependencies:
 
 **Backend:** NestJS, TypeORM, SQLite (Persistent), Passport.js (JWT)
 
+**Observability:** Prometheus, Grafana
+
 ## Design Decisions
 
 - Designed a relational database Entities are `User`,`Survey`, `SurveyFields`, `SurveySubmission` and `SurveySubmissionAnswers` are linked via One-to-Many relations, ensuring high data integrity
 - the SQLite database is persisted via a named volume `(backend-db-data`)
 - Implemented a `RoleGuard` wrapper on the frontend and `RolesGuard` on the backend to strictly separate Admin and Officer functionalities
 - Custom components using `Tailwind CSS` ensure a lightweight, modern design without the bloat of heavy UI frameworks like Material UI or Ant Design
+- **Infrastructure as Code (IaC):** Grafana is fully provisioned via YAML, meaning data sources and dashboards are automatically configured on startup without manual UI steps.
 
 ## Assumptions
 
@@ -55,3 +59,17 @@ If you change dependencies:
 
 - When a survey is taken by an `Officer`, it will still show up in the dashboard
 - `Checkbox` responses are concatenated into comma-separated strings for simplified display in this version
+
+## 📊 Observability & Monitoring (New)
+
+The system includes a monitoring stack to track performance and reliability in real-time.
+
+- **Prometheus:** Scrapes application metrics (CPU, Memory, Event Loop) and custom HTTP metrics (Traffic, Latency) via a dedicated NestJS Interceptor.
+- **Grafana:** Visualizes metrics through an automated, provisioned dashboard available at `http://localhost:3001`.
+- **Custom Metrics:** Tracks the "Golden Signals" including HTTP Throughput by API path.
+
+### Accessing Dashboards
+
+- **Prometheus UI:** [http://localhost:9090](http://localhost:9090)
+- **Grafana UI:** [http://localhost:3001](http://localhost:3001) (Default: `admin`/`admin`)
+- **Metrics Endpoint:** [http://localhost:3000/metrics](http://localhost:3000/metrics)
