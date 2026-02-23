@@ -32,7 +32,22 @@ services:
     depends_on:
       - backend
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dss_prometheus
+    ports:
+      - "9090:9090" # Access UI at http://localhost:9090
+    volumes:
+      - ./backend/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    depends_on:
+      - backend
+
 volumes:
   # Defines the volume used to store SQLite data securely outside the container filesystem
   backend-db-data:
+    driver: local
+  # Persist your metrics data
+  prometheus-data:
     driver: local

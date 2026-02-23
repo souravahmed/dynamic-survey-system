@@ -13,7 +13,9 @@ async function bootstrap() {
     }),
   );
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', {
+    exclude: ['metrics'],
+  });
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors();
 
@@ -24,4 +26,5 @@ async function bootstrap() {
     'Bootstrap',
   );
 }
+
 bootstrap();
