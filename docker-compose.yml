@@ -44,10 +44,25 @@ services:
     depends_on:
       - backend
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dss_grafana
+    ports:
+      - "3001:3000" # Access at http://localhost:3001
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      # NEW: Map your provisioning folder
+      - ./backend/grafana/provisioning:/etc/grafana/provisioning
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
 volumes:
   # Defines the volume used to store SQLite data securely outside the container filesystem
   backend-db-data:
     driver: local
   # Persist your metrics data
   prometheus-data:
+    driver: local
+  grafana-storage:
     driver: local
